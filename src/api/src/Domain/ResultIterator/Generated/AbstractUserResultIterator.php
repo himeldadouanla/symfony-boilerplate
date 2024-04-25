@@ -15,6 +15,7 @@ use TheCodingMachine\TDBM\ResultIterator;
  * The AbstractUserResultIterator class will iterate over results of User class.
  *
  * @method \App\Domain\Model\User[] getIterator()
+ * @method \App\Domain\Model\User[] toArray()
  */
 abstract class AbstractUserResultIterator extends ResultIterator
 {

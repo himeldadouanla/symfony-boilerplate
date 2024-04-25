@@ -16,6 +16,7 @@ use TheCodingMachine\TDBM\ResultIterator;
  * The AbstractDoctrineMigrationVersionResultIterator class will iterate over results of DoctrineMigrationVersion class.
  *
  * @method \App\Domain\Model\DoctrineMigrationVersion[] getIterator()
+ * @method \App\Domain\Model\DoctrineMigrationVersion[] toArray()
  */
 abstract class AbstractDoctrineMigrationVersionResultIterator extends ResultIterator
 {

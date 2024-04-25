@@ -24,6 +24,11 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     private $doctrineMigrationVersionDao = null;
 
     /**
+     * @var \App\Domain\Dao\EmployeeDao|null
+     */
+    private $employeeDao = null;
+
+    /**
      * @var \App\Domain\Dao\ResetPasswordTokenDao|null
      */
     private $resetPasswordTokenDao = null;
@@ -50,6 +55,20 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public function setDoctrineMigrationVersionDao(\App\Domain\Dao\DoctrineMigrationVersionDao $doctrineMigrationVersionDao) : void
     {
         $this->doctrineMigrationVersionDao = $doctrineMigrationVersionDao;
+    }
+
+    public function getEmployeeDao() : \App\Domain\Dao\EmployeeDao
+    {
+        if (!$this->employeeDao) {
+            $this->employeeDao = $this->container->get('App\\Domain\\Dao\\EmployeeDao');
+        }
+
+        return $this->employeeDao;
+    }
+
+    public function setEmployeeDao(\App\Domain\Dao\EmployeeDao $employeeDao) : void
+    {
+        $this->employeeDao = $employeeDao;
     }
 
     public function getResetPasswordTokenDao() : \App\Domain\Dao\ResetPasswordTokenDao
@@ -87,6 +106,7 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     {
         return [
             'App\\Domain\\Dao\\DoctrineMigrationVersionDao' => 'App\\Domain\\Dao\\DoctrineMigrationVersionDao',
+            'App\\Domain\\Dao\\EmployeeDao' => 'App\\Domain\\Dao\\EmployeeDao',
             'App\\Domain\\Dao\\ResetPasswordTokenDao' => 'App\\Domain\\Dao\\ResetPasswordTokenDao',
             'App\\Domain\\Dao\\UserDao' => 'App\\Domain\\Dao\\UserDao',
         ];

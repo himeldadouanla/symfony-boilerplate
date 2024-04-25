@@ -3,6 +3,8 @@ security:
         App\Domain\Model\User:
             algorithm: 'auto'
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     providers:
         custom_user_provider:
             id: App\Infrastructure\Security\UserProvider

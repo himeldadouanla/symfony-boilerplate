@@ -14,6 +14,7 @@ use App\Domain\Enum\Role;
 use App\Domain\Model\Generated\BaseUser;
 use Serializable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use TheCodingMachine\GraphQLite\Annotations as GraphQLite;
@@ -41,7 +42,7 @@ use const PASSWORD_DEFAULT;
 #[GraphQLite\SourceField(name: 'profilePicture')]
 #[GraphQLite\SourceField(name: 'role')]
 #[GraphQLite\SourceField(name: 'activated')]
-class User extends BaseUser implements UserInterface, Serializable, EquatableInterface
+class User extends BaseUser implements UserInterface, Serializable, EquatableInterface, PasswordAuthenticatedUserInterface
 {
     public function __construct(
         string $firstName,
@@ -188,5 +189,13 @@ class User extends BaseUser implements UserInterface, Serializable, EquatableInt
     public function isEqualTo(UserInterface $user): bool
     {
         return $this->getUsername() === $user->getUsername();
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return parent::getPassword();
     }
 }

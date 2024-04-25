@@ -16,6 +16,7 @@ use TheCodingMachine\TDBM\ResultIterator;
  * The AbstractResetPasswordTokenResultIterator class will iterate over results of ResetPasswordToken class.
  *
  * @method \App\Domain\Model\ResetPasswordToken[] getIterator()
+ * @method \App\Domain\Model\ResetPasswordToken[] toArray()
  */
 abstract class AbstractResetPasswordTokenResultIterator extends ResultIterator
 {

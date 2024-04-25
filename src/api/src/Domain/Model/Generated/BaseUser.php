@@ -242,7 +242,7 @@ abstract class BaseUser extends \TheCodingMachine\TDBM\AbstractTDBMObject implem
      * objects from embedding other objects.
      * @return array
      */
-    public function jsonSerialize(bool $stopRecursion = false)
+    public function jsonSerialize(bool $stopRecursion = false) : mixed
     {
         $array = [];
         $array['id'] = $this->getId();

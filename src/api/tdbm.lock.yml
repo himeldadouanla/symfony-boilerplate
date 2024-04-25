@@ -11,6 +11,25 @@ schema:
           type: datetime
           length: 0
         execution_time: integer
+    employees:
+      columns:
+        id:
+          primary_key: true
+          type: integer
+          not_null: true
+          auto_increment: true
+        full_name:
+          type: string
+          length: 255
+        adress:
+          type: string
+          length: 255
+        phone:
+          type: string
+          length: 10
+        birth_day:
+          type: date
+          length: 0
     reset_password_tokens:
       columns:
         id:

@@ -35,6 +35,18 @@ final class UserProvider implements UserProviderInterface
         );
     }
 
+    public function loadUserByIdentifier(string $username): UserInterface
+    {
+        $user = $this->userDao->findOneByEmail($username);
+        if ($user !== null) {
+            return $user;
+        }
+
+        throw new UsernameNotFoundException(
+            'No user found for email ' . $username
+        );
+    }
+
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (! $user instanceof User) {

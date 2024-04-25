@@ -153,7 +153,7 @@ abstract class BaseResetPasswordToken extends \TheCodingMachine\TDBM\AbstractTDB
      * objects from embedding other objects.
      * @return array
      */
-    public function jsonSerialize(bool $stopRecursion = false)
+    public function jsonSerialize(bool $stopRecursion = false) : mixed
     {
         $array = [];
         $array['id'] = $this->getId();
