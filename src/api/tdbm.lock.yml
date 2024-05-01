@@ -15,21 +15,32 @@ schema:
       columns:
         id:
           primary_key: true
-          type: integer
+          type: guid
+          fixed: true
+          length: 36
           not_null: true
-          auto_increment: true
+          comment: '@UUID'
         full_name:
           type: string
           length: 255
-        adress:
+          not_null: true
+        address:
           type: string
           length: 255
         phone:
           type: string
-          length: 10
-        birth_day:
-          type: date
-          length: 0
+          length: 255
+          not_null: true
+        email:
+          type: string
+          length: 255
+          not_null: true
+      indexes:
+        email:
+          column: email
+          unique: true
+          lengths:
+            - null
     reset_password_tokens:
       columns:
         id:

@@ -7,12 +7,157 @@
 declare(strict_types=1);
 
 namespace App\Domain\Model;
-
+use App\Domain\Constraint as DomainAssert;
+use App\Domain\Enum\Locale;
 use App\Domain\Model\Generated\BaseEmployee;
+use Serializable;
+use Symfony\Component\Validator\Constraints as Assert;
+use TheCodingMachine\GraphQLite\Annotations as GraphQLite;
+
+use function count;
+use function is_array;
+use function serialize;
+use function strval;
+use function unserialize;
+
+use const PASSWORD_DEFAULT;
 
 /**
  * The Employee class maps the 'employees' table in database.
+ *
+ * @DomainAssert\Unicity(table="employees", column="email", message="user.email_not_unique", className=Employee::class)
  */
+#[GraphQLite\Type]
+#[GraphQLite\SourceField(name: 'id', outputType: 'ID')]
+#[GraphQLite\SourceField(name: 'fullName')]
+#[GraphQLite\SourceField(name: 'address')]
+#[GraphQLite\SourceField(name: 'phone')]
+#[GraphQLite\SourceField(name: 'email')]
+#[GraphQLite\SourceField(name: 'locale')]
 class Employee extends BaseEmployee
 {
+    public function __construct(
+        string $fullName,
+        string $address,
+        string $phone,
+        string $email,
+        Locale $locale,
+    ) {
+        parent::__construct(
+            fullName: $fullName,
+            address : $address,
+            email : $email,
+            phone : $phone,
+            locale : strval($locale),
+
+        );
+    }
+
+
+
+    /**
+     * @Assert\NotBlank(message="not_blank")
+     * @Assert\Length(max=255, maxMessage="max_length_255")
+     */
+    public function getFullName(): string
+    {
+        return parent::getFullName();
+    }
+
+    /**
+     * @Assert\NotBlank(message="not_blank")
+     * @Assert\Length(max=255, maxMessage="max_length_255")
+     */
+    public function getAddress(): string
+    {
+        return parent::getAddress();
+    }
+
+    /**
+     * @Assert\NotBlank(message="not_blank")
+     * @Assert\Length(max=255, maxMessage="max_length_255")
+     * @Assert\Email(message="invalid_email")
+     */
+    public function getEmail(): string
+    {
+        return parent::getEmail();
+    }
+    /**
+     * @Assert\NotBlank(message="not_blank")
+     * @Assert\Length(max=255, maxMessage="max_length_255")
+     * @Assert\Email(message="invalid_email")
+     */
+    public function getPhone(): string
+    {
+        return parent::getPhone();
+    }
+    /**
+     * @Assert\Choice(callback={"App\Domain\Enum\Locale", "valuesAsArray"}, message="employee.invalid_locale")
+     */
+    public function getLocale(): string
+    {
+        return parent::getLocale();
+    }
+
+    /*
+     * This whole part with the $employeeNameFromSerialize property is a hack to make Employee serializable.
+     * Actually, if we implement the EquatableInterface from Symfony, the only thing that needs to be serialized is
+     * the employeeName (the fullname in our case).
+     * Therefore, we put the employee name in a property that can be serialized/unserialized via the methods of the
+     * Serializable interface.
+     * The unserialized object only contains the "$employeeNameFromSerialize" property but this is not a problem.
+     * The EmployeeProvider will be called to load the full object from the employee name.
+     */
+    private ?string $employeeNameFromSerialize = null;
+
+    public function getEmployeename(): string
+    {
+        if ($this->employeeNameFromSerialize === null) {
+            $this->employeeNameFromSerialize = $this->getFullName();
+        }
+
+        return $this->employeeNameFromSerialize;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // No need to do anything. No sensitive data is ever stored.
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+
+    public function serialize(): string
+    {
+        if ($this->employeeNameFromSerialize === null) {
+            $this->employeeNameFromSerialize = $this->getEmail();
+        }
+
+        return serialize([$this->employeeNameFromSerialize]);
+    }
+
+    public function unserialize(string $data): void
+    {
+        $data = unserialize($data);
+        if (! is_array($data) || count($data) !== 1) {
+            return;
+        }
+
+        $this->employeeNameFromSerialize = $data[0];
+    }
+
+    /**
+     * The equality comparison should neither be done by referential equality
+     * nor by comparing identities (i.e. getId() === getId()).
+     *
+     * However, you do not need to compare every attribute, but only those that
+     * are relevant for assessing whether re-authentication is required.
+     */
+    public function isEqualTo(EmployeeInterface $employee): bool
+    {
+        return $this->getEmployeename() === $employee->getEmployeename();
+    }
 }

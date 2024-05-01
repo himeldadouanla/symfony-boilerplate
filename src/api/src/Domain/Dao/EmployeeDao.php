@@ -9,10 +9,52 @@ declare(strict_types=1);
 namespace App\Domain\Dao;
 
 use App\Domain\Dao\Generated\BaseEmployeeDao;
+use App\Domain\Enum\Filter\SortOrder;
+use App\Domain\Enum\Filter\EmployeesSortBy;
+use App\Domain\Model\Proxy\PasswordProxy;
+use App\Domain\Model\Employee;
+use App\Domain\Throwable\InvalidModel;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use TheCodingMachine\GraphQLite\Annotations\Factory;
+use TheCodingMachine\GraphQLite\Annotations\HideParameter;
+use TheCodingMachine\TDBM\ResultIterator;
+use TheCodingMachine\TDBM\TDBMException;
+use TheCodingMachine\TDBM\TDBMService;
+
 
 /**
  * The EmployeeDao class will maintain the persistence of Employee class into the employees table.
  */
 class EmployeeDao extends BaseEmployeeDao
 {
+    private ValidatorInterface $validator;
+
+    public function __construct(TDBMService $tdbmService, ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+        parent::__construct(tdbmService: $tdbmService);
+    }
+
+
+    /**
+     * @return Employee[]|ResultIterator
+     */
+    public function search(
+        ?string $search = null,
+        ?EmployeesSortBy $sortBy = null,
+        ?SortOrder $sortOrder = null
+    ): ResultIterator {
+        $sortBy    = $sortBy ?: EmployeesSortBy::FULL_NAME();
+        $sortOrder = $sortOrder ?: SortOrder::ASC();
+
+        return $this->find(
+            [
+                'full_name LIKE :search OR address LIKE :search OR phone LIKE :search OR email LIKE :search',
+            ],
+            [
+                'search' => '%' . $search . '%',
+            ],
+            $sortBy . ' ' . $sortOrder
+        );
+    }
 }

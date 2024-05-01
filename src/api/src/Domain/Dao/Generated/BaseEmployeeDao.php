@@ -75,12 +75,12 @@ abstract class BaseEmployeeDao
      *
      * If the primary key does not exist, an exception is thrown.
      *
-     * @param int $id
+     * @param string $id
      * @param bool $lazyLoading If set to true, the object will not be loaded right away. Instead, it will be loaded when you first try to access a method of the object.
      * @return \App\Domain\Model\Employee
      * @throws \TheCodingMachine\TDBM\TDBMException
      */
-    public function getById(int $id, bool $lazyLoading = false) : \App\Domain\Model\Employee
+    public function getById(string $id, bool $lazyLoading = false) : \App\Domain\Model\Employee
     {
         return $this->tdbmService->findObjectByPk('employees', ['id' => $id], [], $lazyLoading, \App\Domain\Model\Employee::class, \App\Domain\ResultIterator\EmployeeResultIterator::class);
     }
@@ -200,5 +200,20 @@ abstract class BaseEmployeeDao
     public function setDefaultSort(string $defaultSort) : void
     {
         $this->defaultSort = $defaultSort;
+    }
+
+    /**
+     * Get a Employee filtered by email.
+     *
+     * @param string $email
+     * @param string[] $additionalTablesFetch A list of additional tables to fetch (for performance improvement)
+     * @return \App\Domain\Model\Employee|null
+     */
+    public function findOneByEmail(string $email, array $additionalTablesFetch = []) : ?\App\Domain\Model\Employee
+    {
+        $filter = [
+            'email' => $email,
+        ];
+        return $this->findOne($filter, [], $additionalTablesFetch);
     }
 }

@@ -53,6 +53,28 @@ export default {
       },
       profile_picture: 'Photo de profil',
     },
+    employee: {
+      full_name_name: {
+        label: 'Nom et Prénom',
+        label_required: 'Nom et Prénom *',
+        placeholder: 'Entrer Nom et Prénom',
+      },
+      address: {
+        label: 'adresse',
+        label_required: 'adresse',
+        placeholder: 'Entrer une adresse',
+      },
+      phone: {
+        label: 'téléphone',
+        label_required: 'téléphone',
+        placeholder: 'Entrer un numero de téléphone',
+      },
+      locale: {
+        label: 'Langue',
+        label_required: 'Langue *',
+        select: 'Sélectionner une langue',
+      },
+    },
     nav: {
       login: 'Se connecter',
       logout: 'Se déconnecter',

@@ -53,6 +53,28 @@ export default {
       },
       profile_picture: 'Profile picture',
     },
+    employee: {
+      full_name: {
+        label: 'First name',
+        label_required: 'Full name *',
+        placeholder: 'Enter a full name',
+      },
+      address: {
+        label: 'address',
+        label_required: 'address *',
+        placeholder: 'Enter a address',
+      },
+      phone: {
+        label: 'phone',
+        label_required: 'phone *',
+        placeholder: 'Enter a phone',
+      },
+      locale: {
+        label: 'Locale',
+        label_required: 'Locale *',
+        select: 'Select a locale',
+      },
+    },
     nav: {
       login: 'Login',
       logout: 'Logout',

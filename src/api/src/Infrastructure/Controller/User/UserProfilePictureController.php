@@ -6,6 +6,7 @@ namespace App\Infrastructure\Controller\User;
 
 use App\Domain\Storage\ProfilePictureStorage;
 use App\Infrastructure\Controller\DownloadController;
+use App\UseCase\Employee\GetEmployees;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use TheCodingMachine\GraphQLite\Annotations\Security;
@@ -15,7 +16,7 @@ final class UserProfilePictureController extends DownloadController
 {
     private ProfilePictureStorage $profilePictureStorage;
 
-    public function __construct(ProfilePictureStorage $profilePictureStorage)
+    public function __construct(ProfilePictureStorage $profilePictureStorage, private GetEmployees $employees)
     {
         $this->profilePictureStorage = $profilePictureStorage;
     }
@@ -35,5 +36,10 @@ final class UserProfilePictureController extends DownloadController
             filename   : $filename,
             fileContent: $picture
         );
+    }
+
+    #[Route(path: '/test', methods: ['GET'])]
+    public function  test(): Response{
+      return new Response($this->employees->employees()->jsonSerialize());
     }
 }

@@ -6,6 +6,9 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use RuntimeException;
+use TheCodingMachine\FluidSchema\TdbmFluidSchema;
+
 
 /**
  * Auto-generated Migration: Please modify to your needs!
@@ -17,7 +20,6 @@ final class Version20240425102214 extends AbstractMigration
         return 'Create employees tables.';
     }
 
-    use TheCodingMachine\FluidSchema\TdbmFluidSchema;
 
     public function up(Schema $schema): void
     {
@@ -26,10 +28,10 @@ final class Version20240425102214 extends AbstractMigration
 
         $db->table('employees')
             ->column('id')->guid()->primaryKey()->comment('@UUID')
-            ->column('full_name')->string(255)->Null()->default(null)
+            ->column('full_name')->string(255)->notNull()
             ->column('address')->string(255)->Null()->default(null)
-            ->column('phone')->string(255)->Null()->unique()
-            ->column('birth_day')->string(255)->null()->default(null);
+            ->column('phone')->string(255)->notNull()
+            ->column('email')->string(255)->notNull()->unique();
 
     }
 

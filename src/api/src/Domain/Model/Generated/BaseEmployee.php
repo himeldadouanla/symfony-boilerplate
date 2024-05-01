@@ -30,18 +30,26 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
 
     /**
      * The constructor takes all compulsory arguments.
+     *
+     * @param string $fullName
+     * @param string $phone
+     * @param string $email
      */
-    public function __construct()
+    public function __construct(string $fullName, string $phone, string $email)
     {
         parent::__construct();
+        $this->setFullName($fullName);
+        $this->setPhone($phone);
+        $this->setEmail($email);
+        $this->setId(Uuid::uuid1()->toString());
     }
 
     /**
      * The getter for the "id" column.
      *
-     * @return int|null
+     * @return string
      */
-    public function getId() : ?int
+    public function getId() : string
     {
         return $this->get('id', 'employees');
     }
@@ -49,9 +57,9 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
     /**
      * The setter for the "id" column.
      *
-     * @param int|null $id
+     * @param string $id
      */
-    public function setId(?int $id) : void
+    public function setId(string $id) : void
     {
         $this->set('id', $id, 'employees');
     }
@@ -59,9 +67,9 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
     /**
      * The getter for the "full_name" column.
      *
-     * @return string|null
+     * @return string
      */
-    public function getFullName() : ?string
+    public function getFullName() : string
     {
         return $this->get('full_name', 'employees');
     }
@@ -69,39 +77,39 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
     /**
      * The setter for the "full_name" column.
      *
-     * @param string|null $fullName
+     * @param string $fullName
      */
-    public function setFullName(?string $fullName) : void
+    public function setFullName(string $fullName) : void
     {
         $this->set('full_name', $fullName, 'employees');
     }
 
     /**
-     * The getter for the "adress" column.
+     * The getter for the "address" column.
      *
      * @return string|null
      */
-    public function getAdress() : ?string
+    public function getAddress() : ?string
     {
-        return $this->get('adress', 'employees');
+        return $this->get('address', 'employees');
     }
 
     /**
-     * The setter for the "adress" column.
+     * The setter for the "address" column.
      *
-     * @param string|null $adress
+     * @param string|null $address
      */
-    public function setAdress(?string $adress) : void
+    public function setAddress(?string $address) : void
     {
-        $this->set('adress', $adress, 'employees');
+        $this->set('address', $address, 'employees');
     }
 
     /**
      * The getter for the "phone" column.
      *
-     * @return string|null
+     * @return string
      */
-    public function getPhone() : ?string
+    public function getPhone() : string
     {
         return $this->get('phone', 'employees');
     }
@@ -109,31 +117,31 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
     /**
      * The setter for the "phone" column.
      *
-     * @param string|null $phone
+     * @param string $phone
      */
-    public function setPhone(?string $phone) : void
+    public function setPhone(string $phone) : void
     {
         $this->set('phone', $phone, 'employees');
     }
 
     /**
-     * The getter for the "birth_day" column.
+     * The getter for the "email" column.
      *
-     * @return \DateTimeImmutable|null
+     * @return string
      */
-    public function getBirthDay() : ?\DateTimeImmutable
+    public function getEmail() : string
     {
-        return $this->get('birth_day', 'employees');
+        return $this->get('email', 'employees');
     }
 
     /**
-     * The setter for the "birth_day" column.
+     * The setter for the "email" column.
      *
-     * @param \DateTimeImmutable|null $birthDay
+     * @param string $email
      */
-    public function setBirthDay(?\DateTimeImmutable $birthDay) : void
+    public function setEmail(string $email) : void
     {
-        $this->set('birth_day', $birthDay, 'employees');
+        $this->set('email', $email, 'employees');
     }
 
     /**
@@ -164,9 +172,9 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
         $array = [];
         $array['id'] = $this->getId();
         $array['fullName'] = $this->getFullName();
-        $array['adress'] = $this->getAdress();
+        $array['address'] = $this->getAddress();
         $array['phone'] = $this->getPhone();
-        $array['birthDay'] = ($date = $this->getBirthDay()) ? $date->format('c') : null;
+        $array['email'] = $this->getEmail();
         return $array;
     }
 
@@ -184,5 +192,6 @@ abstract class BaseEmployee extends \TheCodingMachine\TDBM\AbstractTDBMObject im
     public function __clone()
     {
         parent::__clone();
+        $this->setId(Uuid::uuid1()->toString());
     }
 }
