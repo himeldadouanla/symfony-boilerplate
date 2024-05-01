@@ -55,7 +55,7 @@ export default {
     },
     employee: {
       full_name: {
-        label: 'First name',
+        label: 'Full name',
         label_required: 'Full name *',
         placeholder: 'Enter a full name',
       },
